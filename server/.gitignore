@@ -1,0 +1,9 @@
+# dependencies
+/node_modules
+/bower_components
+
+#Exclude Monog
+/data
+
+# misc
+/.idea

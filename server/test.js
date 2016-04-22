@@ -1,0 +1,1 @@
+var boom=require('boom');
