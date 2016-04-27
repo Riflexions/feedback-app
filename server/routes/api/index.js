@@ -14,11 +14,15 @@ router.get('/', function (req, res, next) {
 var authenticate=require('./authenticate');
 var signup=require('./signup');
 var users=require('./users');
+var questions=require('./crud-routes/questions');
+
+
 var authMiddleware=require('./middleware/jwt-auth-verify').auth;
 
 
 router.use('/authenticate',authenticate);
 router.use('/signup',signup);
+router.use('/questions',questions);
 router.use(authMiddleware);
 router.use('/users',users);
 
