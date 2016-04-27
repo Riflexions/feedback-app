@@ -29,5 +29,5 @@ function auth(req, res, next) {
         return res.status(403).send({ error: {code:403, message:"Missing token"}});
 
     }
-};
+}
 module.exports.auth=auth;
