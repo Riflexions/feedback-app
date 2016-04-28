@@ -17,7 +17,7 @@ var users=require('./users');
 var questions=require('./crud-routes/questions');
 
 
-var authMiddleware=require('./middleware/jwt-auth-verify').auth;
+var authMiddleware=require('./../../middleware/jwt-auth-verify').auth;
 
 
 router.use('/authenticate',authenticate);
