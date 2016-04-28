@@ -4,15 +4,27 @@
 var express = require('express');
 var pluralize = require('./pluralize');
 var pick = require('./pick');
+
+/**
+ * Function module which returns a CRUD router object for the specified model
+ * @param modelName
+ * @param fieldSelection
+ * @param volatileFields
+ * @param requiredFields
+ * @returns {*}
+ */
 module.exports = function (modelName, fieldSelection, volatileFields, requiredFields) {
     var Model = require('./../models/' + modelName);
     var router = express.Router();
-    //var fieldSelection = ['_id', 'text', 'type', 'options', 'createdAt', 'updatedAt'];
-    //var volatileFields = ['text', 'type', 'options'];
 
-
+    /**
+     * POST /entities
+     * accepts JSON POST with all fields in requiredFields to create a new Entity
+     */
     router.post('/', function (req, res) {
         var q = req.body[modelName];
+
+        //Ensure all required fields are present
         var valid = requiredFields.reduce(function (m, d) {
             return (q[d] && m);
         }, true);
@@ -33,7 +45,7 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
             entity[d] = q[d];
         });
 
-        // Save the beer and check for errors
+        // Save the entity and check for errors
         entity.save(function (err) {
             if (!err) {
                 var d = {};
@@ -53,14 +65,20 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
 
     });
 
+    /**
+     * GET /entities
+     * gives paginated response of all entities
+     * Query params: page, limit, select
+     */
     router.get('/', function (req, res) {
-        //Query Params: page, limit
+        //Query Params: page, limit, select
         var options = req.query || {};
 
         options.page = options.page ? +options.page : 1;
         options.limit = options.limit ? +options.limit : 10;
         options.select = options.select ? options.select : fieldSelection.join(' ');
-        // Use the Model model to find all questions
+
+        // Use the Model model to find all entities
         Model.paginate({}, options, function (err, result) {
             if (!err) {
                 var d = {};
@@ -75,8 +93,12 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
 
         });
 
-    })
-    ;
+    });
+
+    /**
+     * GET /entities/:id
+     * Returns an entity as specified by :id
+     */
     router.get('/:id', function (req, res) {
         // Use the Model model to find a specific Model
         Model.findById(req.params.id, function (err, entity) {
@@ -94,7 +116,10 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
         });
     });
 
-
+    /**
+     * PUT /entities/:id
+     * updates an entity as specified by :id
+     */
     router.put('/:id', function (req, res) {
         var q = req.body[modelName];
 
@@ -133,7 +158,10 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
         });
     });
 
-
+    /**
+     * DELETE /entities/:id
+     * deletes an entity as specified by :id
+     */
     router.delete('/:id', function (req, res) {
         // Use the Model model to find a specific Model and remove it
         Model.findByIdAndRemove(req.params.id, function (err) {
@@ -143,5 +171,6 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
                 res.json({});
         });
     });
+
     return router;
 };
