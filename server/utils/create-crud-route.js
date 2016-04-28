@@ -16,8 +16,11 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
         var valid = requiredFields.reduce(function (m, d) {
             return (q[d] && m);
         }, true);
-        if (!(q && valid))
+        if (!(q && valid)) {
             res.boom.badRequest('Missing fields');
+            return;
+        }
+
 
         // Create a new instance of the model
         var entity = new Model();

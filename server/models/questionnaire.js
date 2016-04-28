@@ -3,7 +3,7 @@
  */
 // Load required packages
 var mongoose = require('mongoose');
-var Question = require("question");
+var Question = require("./question");
 var timestamps = require('mongoose-timestamp');
 var mongoosePaginate = require('mongoose-paginate');
 
