@@ -1,0 +1,19 @@
+<div class="row" data-ng-controller="UsersCtrl">
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>Users</strong>
+            </div>
+            <div class="panel-body">
+                <dl>
+                    <dt data-ng-repeat-start="user in users">{{user.firstname}} {{user.lastname}}</dt>
+                    <dd data-ng-repeat-end>
+                        <small>email:
+                            {{user.email}}
+                        </small>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
