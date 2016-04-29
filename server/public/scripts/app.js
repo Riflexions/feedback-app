@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('angularRestfulAuth', [
+    'angularUtils.directives.dirPagination',
     'ngStorage',
     'ngRoute',
     'angular-loading-bar'
@@ -22,6 +23,10 @@ angular.module('angularRestfulAuth', [
             }).
             when('/users', {
                 templateUrl: 'partials/users.html',
+                controller: 'HomeCtrl'
+            }).
+            when('/questions', {
+                templateUrl: 'partials/questions.html',
                 controller: 'HomeCtrl'
             }).
             otherwise({

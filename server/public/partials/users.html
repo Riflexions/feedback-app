@@ -2,16 +2,33 @@
     <div class="col-lg-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
+                <strong>Current User</strong>
+            </div>
+            <div class="panel-body">
+                <h4>{{currentUser.firstname}} {{currentUser.lastname}}</h4>
+
+                <p>
+                    <small>
+                        {{currentUser.email}}
+                    </small>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
                 <strong>Users</strong>
             </div>
             <div class="panel-body">
                 <dl>
                     <dt data-ng-repeat-start="user in users">{{user.firstname}} {{user.lastname}}</dt>
-                    <dd data-ng-repeat-end>
-                        <small>email:
+                    <dd>
+                        <small>
                             {{user.email}}
                         </small>
                     </dd>
+                    <hr data-ng-repeat-end/>
                 </dl>
             </div>
         </div>

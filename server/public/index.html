@@ -44,6 +44,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a data-ng-href="#/">Home</a></li>
+                <li><a data-ng-href="#/questions">Questions</a></li>
                 <li data-ng-show="token"><a data-ng-href="#/users">Users</a></li>
                 <li data-ng-hide="token"><a data-ng-href="#/signin">Signin</a></li>
                 <li data-ng-hide="token"><a data-ng-href="#/signup">Signup</a></li>
@@ -64,6 +65,9 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-route.min.js"></script>
 <script src="/lib/ngStorage.js"></script>
 <script src="/lib/loading-bar.js"></script>
+<script src="/lib/pagination/dirPagination.js"></script>
+
+
 <script src="/scripts/app.js"></script>
 <script src="/scripts/controllers.js"></script>
 <script src="/scripts/services.js"></script>

@@ -31,10 +31,9 @@ angular.module('angularRestfulAuth')
                 if (res.type == false) {
                     alert(res.data)
                 } else {
-                    console.log("Auth success;data:", JSON.stringify(res.data, null, 4));
                     $localStorage.token = res.data.token;
                     $rootScope.token = $localStorage.token;
-                    //$location.path("#/users").replace();
+                    $rootScope.currentUser = res.data.user;
                     changeLocation('#/users', true, false);
                 }
             }, function () {
@@ -56,7 +55,6 @@ angular.module('angularRestfulAuth')
                 if (res.type == false) {
                     alert(res.data)
                 } else {
-                    //$localStorage.token = res.data.token;
                     alert("Signed up. Please Login");
                     changeLocation('#/signin', true, false);
                 }
@@ -69,6 +67,7 @@ angular.module('angularRestfulAuth')
         $scope.logout = function () {
             Main.logout(function () {
                 delete $rootScope.token;
+                delete $rootScope.currentUser;
                 changeLocation('#/');
             }, function () {
                 alert("Failed to logout!");
@@ -79,9 +78,32 @@ angular.module('angularRestfulAuth')
 
     .controller('UsersCtrl', ['$rootScope', '$scope', '$location', 'Main', function ($rootScope, $scope, $location, Main) {
         Main.users().then(function (res) {
-            console.log("Usere Fetch success;data:", JSON.stringify(res.data, null, 4));
+            //$scope.currentUser = Main.getCurrentUser();
             $scope.users = res.data.users;
         }, function () {
             $rootScope.error = 'Failed to fetch users';
         });
+    }])
+    .controller('QuestionsCtrl', ['$rootScope', '$scope', '$location', 'Main', function ($rootScope, $scope, $location, Main) {
+        $scope.total = 0;
+        $scope.page = 1;
+        $scope.limit = 5;
+
+        $scope.pageChanged = function (newPage) {
+            Main.questions(newPage, $scope.limit).then(function (res) {
+
+                $scope.questions = res.data.questions;
+                var meta = res.data.meta;
+                $scope.meta = meta;
+                $scope.limit = meta.limit;
+                $scope.total = meta.total;
+                $scope.page = meta.page;
+
+
+            }, function () {
+                $rootScope.error = 'Failed to fetch questions';
+            });
+        };
+
+        $scope.pageChanged($scope.page, $scope.limit);
     }]);

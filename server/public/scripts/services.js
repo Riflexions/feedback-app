@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularRestfulAuth')
-    .factory('Main', ['$http', '$localStorage','$timeout', function ($http, $localStorage,$timeout) {
+    .factory('Main', ['$http', '$localStorage', '$timeout', function ($http, $localStorage, $timeout) {
         var baseUrl = "/api";
 
         function changeUser(user) {
@@ -37,6 +37,7 @@ angular.module('angularRestfulAuth')
 
         var currentUser = getUserFromToken();
 
+
         return {
             signup: function (data) {
                 return $http.post(baseUrl + '/signup', data);
@@ -46,6 +47,13 @@ angular.module('angularRestfulAuth')
             },
             users: function () {
                 return $http.get(baseUrl + '/users');
+            },
+            questions: function (page, limit) {
+                var qString = '' + (page ? (limit ? 'page=' + page + '&limit=' + limit : 'page=' + page) : (limit ? 'limit=' + limit : ''));
+                return $http.get(baseUrl + '/questions' + (qString ? '/?' + qString : ''));
+            },
+            getCurrentUser: function () {
+                return currentUser;
             },
             logout: function (success) {
                 changeUser({});

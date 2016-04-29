@@ -1,0 +1,50 @@
+<div class="row" data-ng-controller="QuestionsCtrl">
+    <div class="col-lg-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Questions
+            </div>
+            <div class="panel-body">
+
+                <dl>
+                    <dt pagination-id="questions" dir-paginate-start="question in questions | itemsPerPage: limit"
+                        total-items="total"
+                        current-page="page">
+                        {{question.text}}
+                    </dt>
+                    <dd>
+                        <small>type:
+                            {{question.type}}
+                        </small>
+                    </dd>
+                    <hr dir-paginate-end/>
+                </dl>
+                <dir-pagination-controls pagination-id="questions" template-url="/lib/pagination/dirPagination.tpl.html"
+                                         on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
+                <hr/>
+                <p>
+                <h4>Meta:</h4>
+                <ul>
+                    <li>
+                        <small>Count:</small>
+                        {{meta.total}}
+                    </li>
+                    <li>
+                        <small>Current Page:</small>
+                        {{meta.page}}
+                    </li>
+                    <li>
+                        <small>Limit:</small>
+                        {{meta.limit}}
+                    </li>
+                    <li>
+                        <small>Page Count:</small>
+                        {{meta.pages}}
+                    </li>
+                </ul>
+                </p>
+                <hr/>
+            </div>
+        </div>
+    </div>
+</div>
