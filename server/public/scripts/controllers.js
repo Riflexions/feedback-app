@@ -16,7 +16,7 @@ angular.module('angularRestfulAuth')
                 $location.path(url);
 
             }
-            //$scope.$apply();
+            
         };
 
         $scope.signin = function () {
@@ -78,7 +78,7 @@ angular.module('angularRestfulAuth')
 
     .controller('UsersCtrl', ['$rootScope', '$scope', '$location', 'Main', function ($rootScope, $scope, $location, Main) {
         Main.users().then(function (res) {
-            //$scope.currentUser = Main.getCurrentUser();
+            $rootScope.currentUser = Main.getCurrentUser();
             $scope.users = res.data.users;
         }, function () {
             $rootScope.error = 'Failed to fetch users';

@@ -10,6 +10,7 @@ var Schema = mongoose.Schema;
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var timestamps = require('mongoose-timestamp');
 var Utils = require('./../utils');
+var pagination = require("mongoose-paginate");
 //var ValidationError = require('./../errors').ValidationError;
 var boom = require('boom');
 
@@ -53,7 +54,7 @@ UsersSchema.static('authenticate', function (email, password, cb) {
             expiresIn: 1440 * 60// expires in 24 hours
         });
         if (bcrypt.compareSync(password, user.hashed_password))
-        return    cb(null, {
+            return cb(null, {
                 user: userProjection,
                 token: token
             });
@@ -64,6 +65,7 @@ UsersSchema.static('authenticate', function (email, password, cb) {
 
 
 UsersSchema.plugin(timestamps);
+pagination(UsersSchema);
 mongoose.model('users', UsersSchema);
 
 var OAuthUsersModel = mongoose.model('users');

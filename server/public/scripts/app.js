@@ -37,7 +37,7 @@ angular.module('angularRestfulAuth', [
             return {
                 'request': function (config) {
                     config.headers = config.headers || {};
-                    console.log("Intercepting request; token:", $localStorage.token);
+
                     if ($localStorage.token) {
                         config.headers['x-access-token'] = $localStorage.token;
                     }
