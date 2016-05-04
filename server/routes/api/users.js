@@ -12,12 +12,7 @@ var pick = require('./../../utils/pick');
 var fieldSelection = ['_id', 'firstname', 'lastname', 'email', 'createdAt', 'updatedAt'];
 
 router.get('/', function (req, res, next) {
-    /*User.find().then(function (data) {
-     data = data.map(function (d) {
-     return Utils.pick(d, ['firstname', 'lastname', 'email', 'createdAt', 'updatedAt']);
-     });
-     res.json({users: data});
-     });*/
+
     var options = req.query || {};
 
     options.page = options.page ? +options.page : 1;

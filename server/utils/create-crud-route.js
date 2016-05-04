@@ -54,10 +54,12 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
             }
             else if (err.code == 11000) {
                 res.boom.conflict('Model with same text already exists!');
+                console.error("POST /" + modelName, err);
 
             }
             else {
                 res.boom.badImplementation();
+                console.error("POST /" + modelName, err);
             }
 
 
@@ -87,7 +89,7 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
                 res.json(d);
             }
             else {
-                console.error(err);
+                console.error("GET /" + modelName, err);
                 res.boom.badImplementation();
             }
 
@@ -108,6 +110,7 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
                 res.json(d);
             }
             else if (!entity) {
+                console.error("GET /" + modelName + '/' + req.params.id, err);
                 res.boom.notFound('No matching ID');
             }
             else {
@@ -139,10 +142,12 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
                         res.status(201).json(d);
                     }
                     else if (err.code == 11000) {
+                        console.error("PUT /" + modelName + '/' + req.params.id, err);
                         res.boom.conflict('Model with same text already exists!');
 
                     }
                     else {
+                        console.error("PUT /" + modelName + '/' + req.params.id, err);
                         res.boom.badImplementation();
                     }
 
@@ -150,9 +155,11 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
                 });
             }
             else if (!entity) {
+                console.error("PUT /" + modelName + '/' + req.params.id, err);
                 res.boom.notFound('No matching ID');
             }
             else {
+                console.error("PUT /" + modelName + '/' + req.params.id, err);
                 res.boom.badImplementation();
             }
         });
@@ -165,10 +172,12 @@ module.exports = function (modelName, fieldSelection, volatileFields, requiredFi
     router.delete('/:id', function (req, res) {
         // Use the Model model to find a specific Model and remove it
         Model.findByIdAndRemove(req.params.id, function (err) {
-            if (err)
+            if (err) {
+                console.error("DELETE /" + modelName + '/' + req.params.id, err);
                 res.send(err);
-            else
-                res.json({});
+                return;
+            }
+            res.json({});
         });
     });
 

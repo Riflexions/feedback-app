@@ -16,7 +16,7 @@ angular.module('angularRestfulAuth')
                 $location.path(url);
 
             }
-            
+
         };
 
         $scope.signin = function () {
@@ -31,9 +31,7 @@ angular.module('angularRestfulAuth')
                 if (res.type == false) {
                     alert(res.data)
                 } else {
-                    $localStorage.token = res.data.token;
-                    $rootScope.token = $localStorage.token;
-                    $rootScope.currentUser = res.data.user;
+
                     changeLocation('#/users', true, false);
                 }
             }, function () {
@@ -75,7 +73,6 @@ angular.module('angularRestfulAuth')
         };
         $rootScope.token = $localStorage.token;
     }])
-
     .controller('UsersCtrl', ['$rootScope', '$scope', '$location', 'Main', function ($rootScope, $scope, $location, Main) {
         Main.users().then(function (res) {
             $rootScope.currentUser = Main.getCurrentUser();
@@ -84,13 +81,13 @@ angular.module('angularRestfulAuth')
             $rootScope.error = 'Failed to fetch users';
         });
     }])
-    .controller('QuestionsCtrl', ['$rootScope', '$scope', '$location', 'Main', function ($rootScope, $scope, $location, Main) {
+    .controller('QuestionsCtrl', ['$rootScope', '$scope', '$location', 'CRUD', function ($rootScope, $scope, $location, CRUD) {
         $scope.total = 0;
         $scope.page = 1;
         $scope.limit = 5;
 
         $scope.pageChanged = function (newPage) {
-            Main.questions(newPage, $scope.limit).then(function (res) {
+            CRUD.questions.findAll(newPage, $scope.limit).then(function (res) {
 
                 $scope.questions = res.data.questions;
                 var meta = res.data.meta;

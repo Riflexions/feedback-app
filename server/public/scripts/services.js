@@ -1,8 +1,8 @@
 'use strict';
-
+var baseUrl = "/api";
 angular.module('angularRestfulAuth')
-    .factory('Main', ['$http', '$localStorage', '$timeout', function ($http, $localStorage, $timeout) {
-        var baseUrl = "/api";
+    .factory('Main', ['$rootScope', '$http', '$localStorage', '$timeout', '$q', function ($rootScope, $http, $localStorage, $timeout, $q) {
+
 
         function changeUser(user) {
             angular.extend(currentUser, user);
@@ -43,7 +43,15 @@ angular.module('angularRestfulAuth')
                 return $http.post(baseUrl + '/signup', data);
             },
             signin: function (data) {
-                return $http.post(baseUrl + '/authenticate', data);
+                $http.post(baseUrl + '/authenticate', data).then(function success(res) {
+                    $localStorage.token = res.data.token;
+                    $rootScope.token = $localStorage.token;
+                    $rootScope.currentUser = res.data.user;
+                    changeUser(res.data.user);
+                    return $q.resolve(data);
+                }, function (err) {
+                    $q.reject(err);
+                });
             },
             users: function () {
                 return $http.get(baseUrl + '/users');
@@ -65,5 +73,52 @@ angular.module('angularRestfulAuth')
 
             }
         };
-    }
-    ]);
+    }])
+    .factory('CRUD', ['$http', function ($http) {
+
+
+        function createCRUDOps(modelName) {
+            var resUrl = baseUrl + '/' + modelName;
+            return {
+                find: function (id) {
+                    return $http.get(resUrl + '/' + id);
+                },
+                findAll: function (page, limit) {
+                    var config = {params: {}};
+                    if (page) {
+                        config.params.page = page;
+                    }
+                    if (limit) {
+                        config.params.limit = limit
+                    }
+                    return $http.get(resUrl, config);
+                },
+                create: function (data) {
+                    return $http.post(resUrl, data);
+                },
+                update: function (id, data) {
+                    return $http.put(resUrl + '/' + id, data);
+                },
+                delete: function (id) {
+                    return $http.delete(resUrl + '/' + id);
+                },
+                getChildren: function (parentObject, childName) {
+                    var idArray = parentObject[childName];
+
+                    if (typeof idArray !== 'undefined' && idArray instanceof Array) {
+                        var promiseArray = idArray.map(function (id) {
+                            return $http(baseUrl + '/' + childName + '/' + id);
+                        });
+                        return $q.all(promiseArray);
+                    }
+                    return $q.reject('Child Not found');
+
+                }
+            };
+        }
+
+        return {
+            questions: createCRUDOps('questions'),
+            questionnaires: createCRUDOps('questionnaires')
+        };
+    }]);
